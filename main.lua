@@ -1,7 +1,6 @@
 -- ctrl + shift + l to enable love2d terminal on windows
 
 local color = require("color")
-local util = require("util")
 local game = require("game")
 
 -- Initialize the random number generator
