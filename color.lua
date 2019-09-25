@@ -1,4 +1,3 @@
-
 local color = { }
 
 function color.print(color, mode)
