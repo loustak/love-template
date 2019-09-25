@@ -1,3 +1,4 @@
+local action = require("action")
 local camera = require("camera")
 
 local game = { }
@@ -8,6 +9,9 @@ function game:load()
   -- such as loading game ressources and
   -- things like that.
   love.graphics.setBackgroundColor(1, 1, 1)
+
+  action.register(action.KEY_PRESSED, game.keypressed)
+  action.register(action.KEY_RELEASED, game.keyreleased)
 end
 
 function game:start()
@@ -18,6 +22,7 @@ function game:start()
 end
 
 function game:restart()
+  self:start()
 end
 
 function game:quit()
