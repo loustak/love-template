@@ -69,8 +69,6 @@ function game:draw(dt)
   -- Camera transform
   camera:set()
 
-  -- Draw the currently beeing played level
-
   -- Stop camera transform
   camera:unset()
 
