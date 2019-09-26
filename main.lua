@@ -93,19 +93,3 @@ end
 function love.draw(dt)
   game:draw(dt)
 end
-
-function love.mousepressed(x, y, button, istouch)
-  game:mousepressed(x, y, button, istouch)
-end
-
-function love.mousereleased(x, y, button, istouch)
-  game:mousereleased(x, y, button, istouch)
-end
-
-function love.keypressed(key, scancode, isrepeat)
-  game:keypressed(key, scancode, isrepeat)
-end
-
-function love.keyreleased(key)
-  game:keyreleased(key)
-end

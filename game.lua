@@ -1,4 +1,4 @@
-local action = require("action")
+local actum = require("actum")
 local camera = require("camera")
 
 local game = { }
@@ -10,8 +10,20 @@ function game:load()
   -- things like that.
   love.graphics.setBackgroundColor(1, 1, 1)
 
-  action.register(action.KEY_PRESSED, game.keypressed)
-  action.register(action.KEY_RELEASED, game.keyreleased)
+  actum:keypressed("p", function() self:pause() end)
+  actum:keypressed("r", function() self:restart() end)
+  actum:keypressed("escape", function() self:quit() end)
+  actum:keyreleased("a", function() print("ok") end)
+
+  actum:mousepressed(1, function() self.pressed = true end)
+  actum:mousereleased(1, function() self.pressed = false end)
+
+  actum:mousemoved(function(x, y, dx, dy)
+    print(x .. " " .. y)
+    if self.pressed then
+      camera:move(-dx, -dy)
+    end
+  end)
 end
 
 function game:start()
@@ -19,9 +31,12 @@ function game:start()
   self.fps = 0
   self.paused = false
   self.previousWindowTitle = ""
+
+  self.pressed = false
 end
 
 function game:restart()
+  print("restart")
   self:start()
 end
 
@@ -33,20 +48,6 @@ function game:mousepressed(x, y, button, istouch)
 end
 
 function game:mousereleased(x, y, button, istouch)
-end
-
-function game:keypressed(key, scancode, isrepeat)
-  if key == "r" then
-    self:restart()
-  elseif key == "escape" then
-    self:quit()
-  end
-end
-
-function game:keyreleased(key)
-  if key == "p" then
-    self:pause()
-  end
 end
 
 function game:pause()
@@ -73,6 +74,9 @@ end
 function game:draw(dt)
   -- Camera transform
   camera:set()
+
+  love.graphics.setColor(0, 0, 0)
+  love.graphics.print("HELLO WORLD", 170, 380)
 
   -- Stop camera transform
   camera:unset()
