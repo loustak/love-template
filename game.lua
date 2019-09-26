@@ -13,13 +13,11 @@ function game:load()
   actum:keypressed("p", function() self:pause() end)
   actum:keypressed("r", function() self:restart() end)
   actum:keypressed("escape", function() self:quit() end)
-  actum:keyreleased("a", function() print("ok") end)
 
   actum:mousepressed(1, function() self.pressed = true end)
   actum:mousereleased(1, function() self.pressed = false end)
 
   actum:mousemoved(function(x, y, dx, dy)
-    print(x .. " " .. y)
     if self.pressed then
       camera:move(-dx, -dy)
     end
