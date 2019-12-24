@@ -1,127 +1,78 @@
--- local inspect = require("../cadence/lib/inspect")
-local actum = { }
+local actum = {}
+actum.events = {}
 
-actum.key = { 
-    pressed = { },
-    released = { }
-}
-actum.mouse = { 
-    moved = { },
-    pressed = { },
-    released = { },
-    wheel = { }
-}
-
-function love.keypressed(key, scancode, isrepeat)
-    actum:keyfor(actum.key.pressed, key, scancode, isrepeat)
+function actum:clear()
+  self.events = {}
 end
 
-function love.keyreleased(key, scancode)
-    actum:keyfor(actum.key.released, key, scancode)
+function actum:newaction(func)
+  local action = {}
+  action.func = func
+  action.enabled = true
+
+  function action:enable()
+    self.enabled = true
+  end
+
+  function action:disable()
+    self.enabled = false
+  end
+
+  function action:toggle()
+    self.enabled = not self.enabled
+  end
+
+  return action
 end
 
-function actum:keyfor(actions, key, scancode, isrepeat)
-    for keyname, funcs in pairs(actions) do
-        if keyname == key then
-            for _, func in pairs(funcs) do
-                func(key, scancode, isrepeat)
-            end
-        end
-    end
-end
+function actum:newevent()
+  local event = {}
+  event.actions = {}
 
-function love.mousepressed(x, y, button, istouch)
-    actum:mousefor(actum.mouse.pressed, x, y, button, istouch)
-end
+  function event:clear()
+    self.actions = {}
+  end
 
-function love.mousereleased(x, y, button, istouch)
-    actum:mousefor(actum.mouse.released, x, y, button, istouch)
-end
+  function event:bind(func)
+    local index = #self.actions + 1
+    local action = actum:newaction(func)
 
-function actum:mousefor(actions, x, y, button, istouch)
-    for buttonname, funcs in pairs(actions) do
-        if buttonname == button then
-            for _, func in pairs(funcs) do
-                func(x, y, button, istouch)
-            end
-        end
-    end
-end
-
-function love.mousemoved(x, y, dx, dy, istouch)
-    for _, func in pairs(actum.mouse.moved) do
-        func(x, y, dx, dy, istouch)
-    end
-end
-
-function love.wheelmoved(x, y)
-    for _, func in pairs(actum.mouse.wheel) do
-        func(x, y)
-    end
-end
-
-function actum:keypressed(key, func)
-    return self:construct(self.key.pressed, key, func)
-end
-
-function actum:keyreleased(key, func)
-    return self:construct(self.key.released, key, func)
-end
-
-function actum:mousepressed(button, func)
-    return self:construct(self.mouse.pressed, button, func)
-end
-
-function actum:mousereleased(button, func)
-    return self:construct(self.mouse.released, button, func)
-end
-
-function actum:mousemoved(func)
-    local action = self.mouse.moved
-    local index = #action + 1
-    action[index] = func
-
-    return {
-        enable = function()
-            action[index] = func
-        end,
-        disable = function()
-            action[index] = nil
-        end
-    }
-end
-
-function actum:wheelmoved(func)
-    local action = self.mouse.wheel
-    local index = #action + 1
-    action[index] = func
-
-    return {
-        enable = function()
-            action[index] = func
-        end,
-        disable = function()
-            action[index] = nil
-        end
-    }
-end
-
-function actum:construct(actions, event, func)
-    if actions[event] == nil then
-        actions[event] = { }
+    function action:unbind()
+      table.remove(event.actions, index)
+      self = nil
     end
 
-    local index = #actions[event] + 1
-    actions[event][index] = func
+    self.actions[index] = action
+    return action
+  end
 
-    return {
-        enable = function()
-            actions[event][index] = func
-        end,
-        disable = function()
-            actions[event][index] = nil
-        end
-    }
+  function event:trigger(...)
+    local max = #self.actions
+    for i = 1, max do
+      local action = self.actions[i]
+      if action.enabled then action.func(...) end
+    end
+  end
+
+  return event
+end
+
+function actum:event()
+  local event = self:newevent()
+  local index = #self.events + 1
+  self.events[index] = event
+  return event
+end
+
+function actum:clean()
+  for _, event in ipairs(self.events) do
+    for _, action in ipairs(event.actions) do
+      action:unbind()
+    end
+    event = {}
+  end
+
+  self.events = {}
 end
 
 return actum

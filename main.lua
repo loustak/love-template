@@ -1,7 +1,7 @@
 -- ctrl + shift + l to enable love2d terminal on windows
 
-local color = require("color")
-local game = require("game")
+local color = require('color')
+local game = require('game')
 
 -- Initialize the random number generator
 math.randomseed(os.time())
@@ -36,7 +36,7 @@ function love.run()
     if love.event then
       love.event.pump()
       for name, a, b, c, d, e, f in love.event.poll() do
-        if name == "quit" then
+        if name == 'quit' then
           if not love.quit or not love.quit() then
             return a or 0
           end
@@ -76,7 +76,7 @@ end
 
 function love.load()
   -- Setting global infos
-  love.window.setTitle("Template")
+  love.window.setTitle('Love template')
   love.window.setMode(400, 800, { vsync = true })
   -- Remove blurry pixels
   love.graphics.setDefaultFilter('nearest', 'nearest')

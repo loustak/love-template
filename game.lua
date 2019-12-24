@@ -1,25 +1,26 @@
-local actum = require("actum")
-local camera = require("camera")
+local actum = require('actum')
+local lovebind = require('love_bind')
+local sceneman = require('sceneman')
+local camera = require('camera')
 
-local game = { }
+require('scenes.menu')
+require('scenes.game')
+require('scenes.pause')
+
+local game = {}
 
 function game:load()
   -- Things that should be done only
   -- once in a game should be done here,
   -- such as loading game ressources and
-  -- things like that.
+  -- things like that
+  sceneman:loadall()
+
   love.graphics.setBackgroundColor(1, 1, 1)
 
-  actum:keypressed("p", function() self:pause() end)
-  actum:keypressed("r", function() self:restart() end)
-  actum:keypressed("escape", function() self:quit() end)
-
-  actum:mousepressed(1, function() self.pressed = true end)
-  actum:mousereleased(1, function() self.pressed = false end)
-
-  actum:mousemoved(function(x, y, dx, dy)
-    if self.pressed then
-      camera:move(-dx, -dy)
+  lovebind.keypressed:bind(function(key)
+    if key == 'r' then
+      self:restart()
     end
   end)
 end
@@ -27,42 +28,26 @@ end
 function game:start()
   self.fpsFont = love.graphics.newFont(12)
   self.fps = 0
-  self.paused = false
-  self.previousWindowTitle = ""
 
-  self.pressed = false
+  sceneman:start('menu')
 end
 
 function game:restart()
-  print("restart")
+  -- Use it for debug purpose
+  sceneman:stopall()
+  sceneman:quitall()
   self:start()
+  print('restart')
 end
 
 function game:quit()
+  -- Unload stuff here
+  sceneman:quit()
   love.event.quit(0)
 end
 
-function game:mousepressed(x, y, button, istouch)
-end
-
-function game:mousereleased(x, y, button, istouch)
-end
-
-function game:pause()
-  self.paused = not self.paused
-  if self.paused then
-    self.previousWindowTitle = love.window.getTitle()
-    love.window.setTitle("PAUSE")
-  else
-    love.window.setTitle(self.previousWindowTitle)
-  end
-end
-
 function game:update(dt)
-  -- Don't update the game when the game is paused
-  if not self.paused then
-    -- Place game logic here
-  end
+  sceneman:update(dt)
 
   -- Update fps
   local rdt = love.timer.getDelta()
@@ -70,13 +55,8 @@ function game:update(dt)
 end
 
 function game:draw(dt)
-  -- Camera transform
   camera:set()
-
-  love.graphics.setColor(0, 0, 0)
-  love.graphics.print("HELLO WORLD", 170, 380)
-
-  -- Stop camera transform
+  sceneman:draw(dt)
   camera:unset()
 
   self:drawFPS()
