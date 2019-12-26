@@ -1,26 +1,19 @@
 local sceneman = require('sceneman')
-local lovebind = require('love_bind')
+local autobind = require('scenes.autobind')
 
-local pause = sceneman:new('pause')
+local pause = sceneman:new('pause', autobind())
 
-function pause:start()
-  self.a = lovebind.keyreleased:bind(function(key)
-    if key == 'p' then
-      sceneman:stop():tofront('game')
-    end
-  end)
+function pause:keyreleased(key)
+  if not self:isactive() then return end
 
-  print('start pause')
+  if key == 'p' then
+    sceneman:stop():tofront('game')
+  end
 end
 
 function pause:draw(dt)
   love.graphics.setColor(0, 0, 1)
   love.graphics.print('Pause scene', 170, 380)
-end
-
-function pause:stop()
-  self.a:unbind()
-  print('clean pause')
 end
 
 return pause
