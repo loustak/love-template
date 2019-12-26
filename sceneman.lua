@@ -3,19 +3,20 @@ sceneman.scenes = {}
 sceneman.active = nil
 
 -- Create a new scene
-function sceneman:newscene()
-  local scene = {}
+function sceneman:newscene(base)
+  local scene = base or {}
+
   scene.loaded = false
   scene.started = false
 
-  function scene:load() end
-  function scene:start() end
-  function scene:update() end
-  function scene:draw() end
-  function scene:tofront() end
-  function scene:toback() end
-  function scene:stop(...) end
-  function scene:quit(...) end
+	scene.load = scene.load or function() end
+	scene.start = scene.start or function() end
+	scene.update = scene.update or function() end
+	scene.draw = scene.draw or function() end
+	scene.tofront = scene.tofront or function() end
+	scene.toback = scene.toback or function() end
+	scene.stop = scene.stop or function() end
+	scene.quit = scene.quit or function() end
 
   function scene:isloaded()
     return self.loaded
@@ -33,8 +34,8 @@ function sceneman:newscene()
 end
 
 -- Create and register a new scene
-function sceneman:new(name)
-  local scene = self:newscene()
+function sceneman:new(name, base)
+  local scene = self:newscene(base)
   self.scenes[name] = scene
   return scene
 end
