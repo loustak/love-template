@@ -28,27 +28,30 @@ end
 function actum:newevent()
   local event = {}
   event.actions = {}
+  event.n = 0
 
   function event:clear()
     self.actions = {}
+    self.n = 0
   end
 
   function event:bind(func)
-    local index = #self.actions + 1
     local action = actum:newaction(func)
+    self.n = self.n + 1
+    action.index = self.n
 
     function action:unbind()
-      table.remove(event.actions, index)
+      table.remove(event.actions, self.index)
+      event.n = event.n - 1
       self = nil
     end
 
-    self.actions[index] = action
+    self.actions[self.n] = action
     return action
   end
 
   function event:trigger(...)
-    local max = #self.actions
-    for i = 1, max do
+    for i = 1, self.n do
       local action = self.actions[i]
       if action.enabled then action.func(...) end
     end
