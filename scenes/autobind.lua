@@ -1,5 +1,4 @@
 local lovebind = require('love_bind')
-local inspect = require('inspect')
 
 local function autobind()
   local scene = {}
