@@ -1,4 +1,4 @@
-local sceneman = require('sceneman')
+local sceneman = require('lib.sceneman')
 local autobind = require('scenes.autobind')
 
 local pause = sceneman:new('pause', autobind())

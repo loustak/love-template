@@ -1,4 +1,4 @@
-local actum = require('actum')
+local actum = require('lib.actum')
 
 local lovebind = {}
 lovebind.swipe = {}

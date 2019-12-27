@@ -1,7 +1,7 @@
 -- ctrl + shift + l to enable love2d terminal on windows
 
 -- Debug library so it's ok to load it globally
-inspect = require('inspect')
+inspect = require('lib.inspect')
 local color = require('color')
 local game = require('game')
 

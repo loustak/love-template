@@ -1,6 +1,6 @@
-local actum = require('actum')
-local lovebind = require('love_bind')
-local sceneman = require('sceneman')
+local actum = require('lib.actum')
+local lovebind = require('lib.love_bind')
+local sceneman = require('lib.sceneman')
 local camera = require('camera')
 
 require('scenes.menu')

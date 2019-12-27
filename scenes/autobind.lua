@@ -1,4 +1,4 @@
-local lovebind = require('love_bind')
+local lovebind = require('lib.love_bind')
 
 local function autobind()
   local scene = {}
