@@ -1,7 +1,6 @@
 local actum = require('lib.actum')
 local lovebind = require('lib.love_bind')
 local sceneman = require('lib.sceneman')
-local camera = require('camera')
 
 require('scenes.menu')
 require('scenes.game')
@@ -55,9 +54,7 @@ function game:update(dt)
 end
 
 function game:draw(dt)
-  camera:set()
   sceneman:draw(dt)
-  camera:unset()
 
   self:drawFPS()
 end

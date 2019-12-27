@@ -1,12 +1,13 @@
 local lovebind = require('lib.love_bind')
 
-local function autobind()
-  local scene = {}
+local function autobind(base)
+  local scene = base or {}
   scene.binds = {}
 
   function scene:mousepressed() end
   function scene:mousereleased() end
 	function scene:mousemoved() end
+  function scene:swipe() end
   function scene:keypressed() end
   function scene:keyreleased() end
 
@@ -26,6 +27,12 @@ local function autobind()
     self:bind(
       lovebind.mousereleased:bind(function(...)
         self:mousepressed(...)
+      end)
+    )
+
+    self:bind(
+      lovebind.swipe:bind(function(...)
+        self:swipe(...)
       end)
     )
 
