@@ -7,7 +7,7 @@ local function autobind(base)
   function scene:mousepressed() end
   function scene:mousereleased() end
 	function scene:mousemoved() end
-  function scene:swipe() end
+	function scene:swipe() end
   function scene:keypressed() end
   function scene:keyreleased() end
 
@@ -26,7 +26,13 @@ local function autobind(base)
 
     self:bind(
       lovebind.mousereleased:bind(function(...)
-        self:mousepressed(...)
+        self:mousereleased(...)
+      end)
+    )
+
+    self:bind(
+      lovebind.mousemoved:bind(function(...)
+        self:mousemoved(...)
       end)
     )
 

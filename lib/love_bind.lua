@@ -1,7 +1,7 @@
 local actum = require('lib.actum')
 
 local lovebind = {}
-lovebind.swipe = {}
+lovebind.swipebutton = {}
 
 -- Mouse events
 lovebind.mousepressed = actum:event()
@@ -22,6 +22,35 @@ lovebind.mousemoved = actum:event()
 
 function love.mousemoved(...)
   lovebind.mousemoved:trigger(...)
+  lovebind:handleswipe(...)
+end
+
+-- Custom event to handle swipes
+lovebind.swipe = actum:event()
+
+function lovebind:startswipe(x, y, button)
+  local obj = {}
+  obj.startx = x
+  obj.starty = y
+  self.swipebutton[button] = obj
+end
+
+function lovebind:handleswipe(x, y)
+  for button, obj in pairs(self.swipebutton) do
+    local vx = obj.startx - x
+    local vy = obj.starty - y
+    obj.startx = x
+    obj.starty = y
+    self.swipe:trigger(vx, vy, button)
+  end
+end
+
+function lovebind:endswipe(x, y, button)
+  self.swipebutton[button] = nil
+end
+
+function lovebind:isswaping(button)
+  return self.swipebutton[button] ~= nil
 end
 
 -- Keyboard events
@@ -35,33 +64,6 @@ lovebind.keyreleased = actum:event()
 
 function love.keyreleased(...)
   lovebind.keyreleased:trigger(...)
-end
-
--- Custom event to handle swipes
-lovebind.swipe = actum:event()
-
-function lovebind:startswipe(x, y, button)
-  local obj = {}
-  obj.startx = x
-  obj.starty = y
-  self.swipe[button] = obj
-end
-
-function lovebind:endswipe(x, y, button, istouch)
-  local obj = self.swipe[button]
-
-  local vx = obj.startx - x
-  local vy = obj.starty - y
-
-  self.swipe[button] = nil
-
-  if vx ~= 0 or vy ~= 0 then
-    lovebind.swipe:trigger(vx, vy, button, istouch)
-  end
-end
-
-function lovebind:isswaping(button)
-  return self.swipe[button] ~= nil
 end
 
 return lovebind
