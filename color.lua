@@ -1,4 +1,4 @@
-local color = { }
+local color = {}
 
 function color.print(color, mode)
   mode = mode or "255"
