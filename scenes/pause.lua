@@ -1,7 +1,7 @@
 local sceneman = require('lib.sceneman')
-local autobind = require('scenes.autobind')
+local base = require('scenes.base')
 
-local pause = sceneman:new('pause', autobind())
+local pause = sceneman:new('pause', base)
 
 function pause:keyreleased(key)
   if not self:isactive() then return end

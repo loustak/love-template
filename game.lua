@@ -3,8 +3,8 @@ local lovebind = require('lib.love_bind')
 local sceneman = require('lib.sceneman')
 
 require('scenes.menu')
-require('scenes.game')
-require('scenes.pause')
+-- require('scenes.game')
+-- require('scenes.pause')
 
 local game = {}
 

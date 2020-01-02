@@ -1,8 +1,5 @@
 local sceneman = require('lib.sceneman')
-local camera = require('scenes.camera')
-local autobind = require('scenes.autobind')
-
-local base = autobind(camera())
+local base = require('scenes.base')
 
 local menu = sceneman:new('menu', base)
 
@@ -10,14 +7,19 @@ function menu:mousepressed(x, y)
   sceneman:stop():start('game')
 end
 
-function menu:drawcamera(dt)
-  love.graphics.setColor(1, 0, 0)
-  love.graphics.print('Menu scene', 170, 380)
+function menu.autobind:keypressed(key)
+
+  if key == 'd' then
+    menu:cam('main'):move(20)
+  end
+  if key == 'f' then
+    menu:cam('other'):move(0, 10)
+  end
 end
 
-function menu:stop()
-  self:autounbind()
-  self.camera:setPosition(0, 0)
+function menu.cameras.main()
+  love.graphics.setColor(1, 0, 0)
+  love.graphics.print('Menu scene', 170, 380, 0, 3, 3)
 end
 
 return menu

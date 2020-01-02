@@ -2,11 +2,21 @@ local lens = {}
 
 function lens:newcamera()
   local camera = {}
-  camera.x = 0
-  camera.y = 0
-  camera.scaleX = 1
-  camera.scaleY = 1
-  camera.rotation = 0
+
+  function camera:init()
+    self.x = 0
+    self.y = 0
+    self.scaleX = 1
+    self.scaleY = 1
+    self.rotation = 0
+    return self
+  end
+
+  function camera:reset()
+    print('camera reset')
+    self:init()
+    return self
+  end
 
   function camera:set()
     love.graphics.push()
@@ -57,7 +67,7 @@ function lens:newcamera()
     return xx, yy
   end
 
-  return camera
+  return camera:init()
 end
 
 return lens

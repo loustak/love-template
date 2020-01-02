@@ -1,7 +1,7 @@
 local sceneman = require('lib.sceneman')
-local autobind = require('scenes.autobind')
+local base = require('scenes.base')
 
-local game = sceneman:new('game', autobind())
+local game = sceneman:new('game', base)
 
 function game:keyreleased(key)
   if not self:isactive() then return end

@@ -1,7 +1,7 @@
 local lovebind = require('lib.love_bind')
 
-local function autobind(base)
-  local scene = base or {}
+local function autobind()
+  local scene = {}
   scene.binds = {}
 
   function scene:mousepressed() end
