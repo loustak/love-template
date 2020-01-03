@@ -1,37 +1,41 @@
 local sceneman = require('lib.sceneman')
 local lovebind = require('lib.love_bind')
+local lens = require('lib.lens')
 
-local _cameras = require('scenes.cameras')
 local _layers = require('scenes.layers')
 local _autobind = require('scenes.autobind')
+local _timers = require('scenes.timers')
 
 local function base()
   local scene = {}
-  scene.cameras = _cameras()
   scene.layers = _layers()
   scene.autobind = _autobind()
+  scene.timers = _timers()
 
   function scene:start()
-    self.cameras:start()
-    self.layers:start()
     self.autobind:start()
-  end
-
-  function scene:cam(name)
-    return self.cameras:get(name)
+    self.layers:start()
+    self.maincam = lens:newcamera()
   end
 
   function scene:layer(name)
     return self.layers:get(name)
   end
 
+  function scene:update(delay)
+    self.timers:update(delay)
+  end
+
   function scene:draw(...)
-    self.cameras:draw(...)
+    self.maincam:set()
+    self.layers:draw(...)
+    self.maincam:unset()
   end
 
   function scene:stop()
-    self.cameras:stop()
     self.autobind:stop()
+    self.layers:stop()
+    self.timers:stop()
   end
 
   return scene

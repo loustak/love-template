@@ -69,10 +69,6 @@ end
 --   return scene
 -- end
 
-function sceneman:newscene(parent)
-  return Scene:new(parent)
-end
-
 -- Create and register a new scene
 function sceneman:new(name, parent)
   local scene = Scene:new(parent)
