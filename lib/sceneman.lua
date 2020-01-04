@@ -2,76 +2,45 @@ local sceneman = {}
 sceneman.scenes = {}
 sceneman.active = nil
 
-local Scene = {}
-
-function Scene:new(o)
-  o = o or {}
-
-  o.load = o.load or function() end
-  o.start = o.start or function() end
-  o.update = o.update or function() end
-  o.draw = o.draw or function() end
-  o.tofront = o.tofront or function() end
-  o.toback = o.toback or function() end
-  o.stop = o.stop or function() end
-  o.quit = o.quit or function() end
-
-  o.loaded = false
-  o.started = false
-
-  setmetatable(o, self)
-  self.__index = self
-  return o
-end
-
-function Scene:isloaded()
-  return self.loaded
-end
-
-function Scene:isstarted()
-  return self.started
-end
-
-function Scene:isactive()
-  return sceneman.active == self
-end
-
 -- Create a new scene
--- function sceneman:newscene(parent)
---   local scene = {}
--- 
---   setmetatable(scene, parent)
---   scene.__index = parent
--- 
---   scene.loaded = false
---   scene.started = false
--- 
--- 	scene.load = scene.load or function() end
--- 	scene.update = scene.update or function() end
--- 	scene.draw = scene.draw or function() end
--- 	scene.tofront = scene.tofront or function() end
--- 	scene.toback = scene.toback or function() end
--- 	scene.stop = scene.stop or function() end
--- 	scene.quit = scene.quit or function() end
--- 
---   function scene:isloaded()
---     return self.loaded
---   end
--- 
---   function scene:isactive()
---     return sceneman.active == self
---   end
--- 
---   function scene:isstarted()
---     return self.started
---   end
--- 
---   return scene
--- end
+function sceneman:newscene(parent)
+  local scene = {}
+
+  setmetatable(scene, parent)
+  parent.__index = parent
+  scene.super = parent
+
+  scene.loaded = false
+  scene.started = false
+
+  local emptyfunc = function() end
+
+	scene.load = scene.load or emptyfunc
+	scene.update = scene.update or emptyfunc
+	scene.draw = scene.draw or emptyfunc
+	scene.tofront = scene.tofront or emptyfunc
+	scene.toback = scene.toback or emptyfunc
+	scene.stop = scene.stop or emptyfunc
+	scene.quit = scene.quit or emptyfunc
+
+  function scene:isloaded()
+    return self.loaded
+  end
+
+  function scene:isactive()
+    return sceneman.active == self
+  end
+
+  function scene:isstarted()
+    return self.started
+  end
+
+  return scene
+end
 
 -- Create and register a new scene
 function sceneman:new(name, parent)
-  local scene = Scene:new(parent)
+  local scene = self:newscene(parent)
   self.scenes[name] = scene
   return scene
 end

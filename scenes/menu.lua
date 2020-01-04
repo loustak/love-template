@@ -3,6 +3,11 @@ local base = require('scenes.base')
 
 local menu = sceneman:new('menu', base)
 
+function menu:start()
+  menu.super:start()
+  menu.display = false
+end
+
 function menu.autobind:mousepressed(x, y)
   menu.timers:add(1, function()
     menu.display = true
