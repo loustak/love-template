@@ -3,19 +3,16 @@ local lovebind = require('lib.love_bind')
 local sceneman = require('lib.sceneman')
 
 require('scenes.menu')
--- require('scenes.game')
--- require('scenes.pause')
+require('scenes.game')
+require('scenes.pause')
 
-local game = {}
+local gamewrapper = {}
 
-function game:load()
-  -- Things that should be done only
-  -- once in a game should be done here,
-  -- such as loading game ressources and
-  -- things like that
+function gamewrapper:load()
   sceneman:loadall()
 
   love.graphics.setBackgroundColor(1, 1, 1)
+  self.fpsFont = love.graphics.newFont(12)
 
   lovebind.keypressed:bind(function(key)
     if key == 'r' then
@@ -24,14 +21,13 @@ function game:load()
   end)
 end
 
-function game:start()
-  self.fpsFont = love.graphics.newFont(12)
+function gamewrapper:start()
   self.fps = 0
 
   sceneman:start('menu')
 end
 
-function game:restart()
+function gamewrapper:restart()
   -- Use it for debug purpose
   sceneman:stopall()
   sceneman:quitall()
@@ -39,13 +35,13 @@ function game:restart()
   print('restart')
 end
 
-function game:quit()
+function gamewrapper:quit()
   -- Unload stuff here
-  sceneman:quit()
+  sceneman:quitall()
   love.event.quit(0)
 end
 
-function game:update(dt)
+function gamewrapper:update(dt)
   sceneman:update(dt)
 
   -- Update fps
@@ -53,17 +49,17 @@ function game:update(dt)
   self.fps = math.floor(1 / rdt)
 end
 
-function game:draw(dt)
+function gamewrapper:draw(dt)
   sceneman:draw(dt)
 
   self:drawFPS()
 end
 
-function game:drawFPS()
+function gamewrapper:drawFPS()
   love.graphics.setColor(0, 0, 0)
   love.graphics.setFont(self.fpsFont)
   love.graphics.print(self.fps, 15, 15)
   love.graphics.setColor(1, 1, 1)
 end
 
-return game
+return gamewrapper

@@ -1,10 +1,14 @@
 local sceneman = require('lib.sceneman')
 local base = require('scenes.base')
 
-local game = sceneman:new('game', base)
+local game = sceneman:new('game', base())
 
-function game:keyreleased(key)
-  if not self:isactive() then return end
+function game:start()
+  game.super:start()
+end
+
+function game.binds:keypressed(key)
+  if not game:isactive() then return end
 
   if key == 'p' then
     sceneman:toback():start('pause')

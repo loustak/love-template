@@ -3,7 +3,7 @@
 -- Debug library so it's ok to load it globally
 inspect = require('lib.inspect')
 local color = require('color')
-local game = require('game')
+local gamewrapper = require('gamewrapper')
 
 -- Initialize the random number generator
 math.randomseed(os.time())
@@ -84,14 +84,14 @@ function love.load()
   love.graphics.setDefaultFilter('nearest', 'nearest')
 
   -- Load the game ressources once
-  game:load()
-  game:start()
+  gamewrapper:load()
+  gamewrapper:start()
 end
 
 function love.update(dt)
-  game:update(dt)
+  gamewrapper:update(dt)
 end
 
 function love.draw(dt)
-  game:draw(dt)
+  gamewrapper:draw(dt)
 end

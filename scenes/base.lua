@@ -9,11 +9,11 @@ local _timers = require('scenes.timers')
 local function base()
   local scene = {}
   scene.layers = _layers()
-  scene.autobind = _autobind()
+  scene.binds = _autobind()
   scene.timers = _timers()
 
   function scene:start()
-    self.autobind:start()
+    self.binds:start()
     self.layers:start()
     self.maincam = lens:newcamera()
   end
@@ -33,7 +33,7 @@ local function base()
   end
 
   function scene:stop()
-    self.autobind:stop()
+    self.binds:stop()
     self.layers:stop()
     self.timers:stop()
   end
@@ -41,4 +41,4 @@ local function base()
   return scene
 end
 
-return base()
+return base

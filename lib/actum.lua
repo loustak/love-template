@@ -28,32 +28,35 @@ end
 function actum:newevent()
   local event = {}
   event.actions = {}
-  event.n = 0
+  event.unbinded = {}
 
   function event:clear()
+    for _, action in pairs(self.actions) do
+      action = nil
+    end
+
     self.actions = {}
-    self.n = 0
   end
 
   function event:bind(func)
     local action = actum:newaction(func)
-    self.n = self.n + 1
-    action.index = self.n
 
     function action:unbind()
       table.remove(event.actions, self.index)
-      event.n = event.n - 1
-      self = nil
     end
 
-    self.actions[self.n] = action
+    local index = #self.actions + 1
+    action.index = index
+    self.actions[index] = action
     return action
   end
 
   function event:trigger(...)
-    for i = 1, self.n do
+    for i = 1, #self.actions do
       local action = self.actions[i]
-      if action.enabled then action.func(...) end
+      if action and action.enabled then
+        action.func(...)
+      end
     end
   end
 

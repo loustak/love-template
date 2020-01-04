@@ -1,22 +1,28 @@
 local sceneman = require('lib.sceneman')
 local base = require('scenes.base')
 
-local menu = sceneman:new('menu', base)
+local menu = sceneman:new('menu', base())
 
 function menu:start()
   menu.super:start()
   menu.display = false
 end
 
-function menu.autobind:mousepressed(x, y)
-  menu.timers:add(1, function()
-    menu.display = true
-  end):start()
+function menu.binds:mousepressed(x, y, button)
+  if button == 1 then
+    print('start timer')
+    menu.timers:add(1, function()
+      print('end timer')
+      menu.display = true
+    end):start()
+  end
 
-  -- sceneman:stop():start('game')
+  if button == 2 then
+    sceneman:stop():start('game')
+  end
 end
 
-function menu.autobind:keypressed(key)
+function menu.binds:keypressed(key)
   if key == 'd' then
     menu.maincam:move(20)
   end

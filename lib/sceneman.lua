@@ -6,9 +6,11 @@ sceneman.active = nil
 function sceneman:newscene(parent)
   local scene = {}
 
-  setmetatable(scene, parent)
-  parent.__index = parent
-  scene.super = parent
+  if parent then
+    setmetatable(scene, parent)
+    parent.__index = parent
+    scene.super = parent
+  end
 
   scene.loaded = false
   scene.started = false
